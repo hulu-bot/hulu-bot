@@ -39,7 +39,7 @@
     }
     
     welcome() {
-      alert('welcome page');
+      $('.Masthead__input button:contains("FREE TRIAL")').click();
     }
   }
   
