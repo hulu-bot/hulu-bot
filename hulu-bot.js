@@ -1,1 +1,3 @@
-alert('derp');
+() => {
+  alert('derp');
+}
