@@ -3,33 +3,51 @@
     return new Promise(resolve => setTimeout(resolve, ms));
   }
   
-  class Bot {
+ class _Bot {
     constructor() {
-      this.loadJs('https://code.jquery.com/jquery-3.4.1.min.js');
+      
+    }
+   
+    async init() {
+      await this.loadJs('https://code.jquery.com/jquery-3.4.1.min.js');
     }
     
     // dynamically load JS file from URL.
-    loadJs(url){
-      let script = document.createElement('script');
-      script.src = url;
-      script.type = 'text/javascript';
-      document.getElementsByTagName('head')[0].appendChild(script);
+    async loadJs(src){
+      //(async () => {
+        await new Promise(resolve => {
+          console.log('inner 1');
+          let head = document.head || document.getElementsByTagName('head')[0];
+          let script = document.createElement('script');
+
+          script.onreadystatechange = script.onload = () => {
+            console.log('inner 3');
+            resolve();            
+          }
+          script.src = src;
+          script.type = 'text/javascript';
+
+          head.insertBefore(script, head.firstChild);
+          console.log('inner 2');
+          //document.getElementsByTagName('head')[0].appendChild(script);
+        });
+      //})();
+      
+      console.log('outer');
     }
     
     // run for the current page.
     run() {
-      let hostname = window.location.hostname;
-      
-      if(hostname.includes('hulu.com')) {
-        this.hulu = new Hulu();
-        this.hulu.check(url);
+      if(window.location.hostname.includes('hulu.com')) {
+        this.hulu = new Hulu(window.location.href);
+        this.hulu.check();
       }
     }
   }
   
   class PageMonitor {
     constructor() {}
-    monitor(query, action) {
+    async monitor(query, action) {
       while(!query()) {
         await sleep(1000);
       }      
@@ -43,14 +61,15 @@
   // Hulu processing class
   // ======
   class Hulu extends PageMonitor {
-    constructor() {
-      
+    constructor(url) { 
+      super(); 
+      this.url = url;
     }
     
-    check(url) {
-      if(url.includes('hulu.com/welcome')) {
+    check() {
+      if(this.url.includes('hulu.com/welcome')) {
         this.welcome();
-      } else if(url.includes('derp')) {
+      } else if(this.url.includes('derp')) {
         
       } else {
         
