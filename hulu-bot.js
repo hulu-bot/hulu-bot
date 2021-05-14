@@ -3,37 +3,25 @@
     return new Promise(resolve => setTimeout(resolve, ms));
   }
   
- class _Bot {
-    constructor() {
-      
-    }
+ class Bot {
+    constructor() {}
    
     async init() {
       await this.loadJs('https://code.jquery.com/jquery-3.4.1.min.js');
     }
     
     // dynamically load JS file from URL.
-    async loadJs(src){
-      //(async () => {
-        await new Promise(resolve => {
-          console.log('inner 1');
-          let head = document.head || document.getElementsByTagName('head')[0];
-          let script = document.createElement('script');
+    loadJs(src){
+      return new Promise(resolve => {
+        let head = document.head || document.getElementsByTagName('head')[0];
+        let script = document.createElement('script');
 
-          script.onreadystatechange = script.onload = () => {
-            console.log('inner 3');
-            resolve();            
-          }
-          script.src = src;
-          script.type = 'text/javascript';
+        script.onreadystatechange = script.onload = () => resolve();
+        script.src = src;
+        script.type = 'text/javascript';
 
-          head.insertBefore(script, head.firstChild);
-          console.log('inner 2');
-          //document.getElementsByTagName('head')[0].appendChild(script);
-        });
-      //})();
-      
-      console.log('outer');
+        head.insertBefore(script, head.firstChild);
+      });
     }
     
     // run for the current page.
@@ -47,12 +35,32 @@
   
   class PageMonitor {
     constructor() {}
-    async monitor(query, action) {
-      while(!query()) {
+    
+    async wait(query) {
+      let found = null;
+      while(!(found = $(query)) || !found.length) {
         await sleep(1000);
       }      
-      if(action) {
-        action(); 
+      return found;
+    }
+    
+    async click(query) {
+      let found = null;
+      while(!(found = query()) || !found.length) {
+        await sleep(1000);
+      }      
+      if(found.click) {
+        found.click();
+      }
+    }
+    
+    async fill(query, value) {
+      let found = null;
+      while(!(found = query()) || !found.length) {
+        await sleep(1000);
+      }      
+      if(found.value) {
+        found.click();
       }
     }
   }
@@ -69,22 +77,31 @@
     check() {
       if(this.url.includes('hulu.com/welcome')) {
         this.welcome();
-      } else if(this.url.includes('derp')) {
-        
+      } else if(this.url.includes('signup.hulu.com/plans')) {
+        this.plans();
+      } else if(this.url.includes('signup.hulu.com/account')) {
+        this.account();
       } else {
         
       }
     }
     
     welcome() {
-      this.monitor(
-        () => $('.Masthead__input button:contains("FREE TRIAL")'),
-        () => $('.Masthead__input button:contains("FREE TRIAL")').click()
-      );
+      this.wait('.Masthead__input button:contains("FREE TRIAL")').click();
+    }
+    
+    plans() {
+      this.wait('button[aria-label*="$5.99"]:contains("SELECT")').click();
+    }
+    
+    async account() {
+      await this.wait('#email').val('derp@gmail.com');
+      await this.wait('#password').val('derp');
     }
   }
   
   let bot = new Bot();
+  await bot.init();
   bot.run();
   
 })();
