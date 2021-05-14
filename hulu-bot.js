@@ -1,8 +1,11 @@
-(() => {
+(async () => {
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  
   class Bot {
     constructor() {
-      this.loadJs('https://code.jquery.com/jquery-3.4.1.min.js');      
-      this.hulu = new Hulu();
+      this.loadJs('https://code.jquery.com/jquery-3.4.1.min.js');
     }
     
     // dynamically load JS file from URL.
@@ -15,15 +18,31 @@
     
     // run for the current page.
     run() {
-      let url = window.location.href;
-      this.hulu.check(url);
+      let hostname = window.location.hostname;
+      
+      if(hostname.includes('hulu.com')) {
+        this.hulu = new Hulu();
+        this.hulu.check(url);
+      }
+    }
+  }
+  
+  class PageMonitor {
+    constructor() {}
+    monitor(query, action) {
+      while(!query()) {
+        await sleep(1000);
+      }      
+      if(action) {
+        action(); 
+      }
     }
   }
   
   // ======
   // Hulu processing class
   // ======
-  class Hulu {
+  class Hulu extends PageMonitor {
     constructor() {
       
     }
@@ -39,7 +58,10 @@
     }
     
     welcome() {
-      $('.Masthead__input button:contains("FREE TRIAL")').click();
+      this.monitor(
+        () => $('.Masthead__input button:contains("FREE TRIAL")'),
+        () => $('.Masthead__input button:contains("FREE TRIAL")').click()
+      );
     }
   }
   
