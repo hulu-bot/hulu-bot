@@ -36,7 +36,7 @@
   class PageMonitor {
     constructor() {}
     
-    async wait(query) {
+    async $(query) {
       let found = null;
       while(!(found = $(query)) || !found.length) {
         await sleep(1000);
@@ -75,15 +75,21 @@
     }
     
     check() {
-      if(this.url.includes('hulu.com/welcome')) {
+      if (this.url.includes('hulu.com/start/affiliate?')) {
+        this.affiliate();
+      } else if (this.url.includes('hulu.com/welcome')) {
         this.welcome();
-      } else if(this.url.includes('signup.hulu.com/plans')) {
+      } else if (this.url.includes('signup.hulu.com/plans')) {
         this.plans();
-      } else if(this.url.includes('signup.hulu.com/account')) {
+      } else if (this.url.includes('signup.hulu.com/account')) {
         this.account();
       } else {
         
       }
+    }
+    
+    affiliate() {
+      window.location.href = "https://www.hulu.com";
     }
     
     welcome() {
@@ -95,8 +101,8 @@
     }
     
     async account() {
-      await this.wait('#email').val('derp@gmail.com');
-      await this.wait('#password').val('derp');
+      (await this.$('#email')).val('derp@gmail.com');
+      (await this.$('#password')).val('derp');
     }
   }
   
