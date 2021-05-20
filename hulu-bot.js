@@ -8,6 +8,8 @@
    
     async init() {
       await this.loadJs('https://code.jquery.com/jquery-3.4.1.min.js');
+      await this.loadJs('http://bililite.com/inc/bililiteRange.js');
+      await this.loadJs('http://bililite.com/inc/jquery.sendkeys.js');
     }
     
     // dynamically load JS file from URL.
@@ -65,6 +67,14 @@
     }
   }
   
+  async function find(query) {
+    let found = null;
+    while(!(found = $(query)) || !found.length) {
+      await sleep(1000);
+    }      
+    return found;
+  }
+  
   // ======
   // Hulu processing class
   // ======
@@ -88,21 +98,23 @@
       }
     }
     
-    affiliate() {
+    async affiliate() {
       window.location.href = "https://www.hulu.com";
     }
     
-    welcome() {
-      this.wait('.Masthead__input button:contains("FREE TRIAL")').click();
+    async welcome() {
+      (await find('.Masthead__input button:contains("FREE TRIAL")')).click();
     }
     
-    plans() {
-      this.wait('button[aria-label*="$5.99"]:contains("SELECT")').click();
+    async plans() {
+      (await find('button[aria-label*="$5.99"]:contains("SELECT")')).click();
     }
     
     async account() {
-      (await this.$('#email')).val('derp@gmail.com');
-      (await this.$('#password')).val('derp');
+      (await find('#email')).sendkeys('A');
+      //(await find('#email')).val('derp@gmail.com');
+      //(await find('#password')).trigger(jQuery.Event('keypress', { keycode: 13 }));
+      //(await find('#password')).val('derp');
     }
   }
   
