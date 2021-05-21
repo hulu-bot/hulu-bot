@@ -128,6 +128,7 @@
     async account() {
       await fill('#email', 'derp@herp.com');
       await fill('#password', 'werple');
+      await fill('#firstName', 'Dude');
     }
   }
   
