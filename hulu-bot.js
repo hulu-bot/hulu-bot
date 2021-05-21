@@ -129,6 +129,13 @@
       await fill('#email', 'derp@herp.com');
       await fill('#password', 'werple');
       await fill('#firstName', 'Dude');
+      
+      $('#birthdayMonth-item-0').click();
+      $('#birthdayDay-item-0').click();
+      $('#birthdayYear-item-40').click();
+      $('#gender-item-2').click();
+      
+      (await find('.button--continue:contains("CONTINUE")')).click();      
     }
   }
   
