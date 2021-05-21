@@ -75,6 +75,18 @@
     return found;
   }
   
+  async function until(condition) {
+    while(!condition()) {
+      await sleep(1000);
+    }
+  }
+  
+  async function fill(query, string) {
+    (await find(query))[0].focus();
+    document.title = 'BotHelper:SendText('+string+')';
+    await until(() => ($(query).val() == string));
+  }
+  
   // ======
   // Hulu processing class
   // ======
@@ -111,48 +123,8 @@
     }
     
     async account() {
-      (await find('#email'))[0].focus();
-      
-      /*
-      //var fireOnThis = (await find('#email'))[0];
-      
-      //$('#email').val('derp@gmail.com');
-      var fireOnThis = $('#email')[0];
-      
-      var keyboardEvent = document.createEvent('KeyboardEvent');
-      var initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? 'initKeyboardEvent' : 'initKeyEvent';
-
-      keyboardEvent[initMethod](
-        'keydown', // event type: keydown, keyup, keypress
-        true, // bubbles
-        true, // cancelable
-        window, // view: should be window
-        false, // ctrlKey
-        false, // altKey
-        false, // shiftKey
-        false, // metaKey
-        65, // keyCode: unsigned long - the virtual key code, else 0
-        0, // charCode: unsigned long - the Unicode character associated with the depressed key, else 0
-      );
-      fireOnThis.dispatchEvent(keyboardEvent);
-      */
-      /*
-      var evObj;
-      if( window.KeyEvent ) {
-        evObj = document.createEvent('KeyEvents');
-        evObj.initKeyEvent( 'keyup', true, true, window, false, false, false, false, 45, 0 );
-      } else {
-        evObj = document.createEvent('UIEvents');
-        evObj.initUIEvent( 'keyup', true, true, window, 1 );
-        evObj.keyCode = 45;
-      }
-      fireOnThis.dispatchEvent(evObj);
-      */
-      
-      //(await find('#email')).sendkeys('A');
-      //(await find('#email')).val('derp@gmail.com');
-      //(await find('#password')).trigger(jQuery.Event('keypress', { keycode: 13 }));
-      //(await find('#password')).val('derp');
+      await fill('#email', 'derp@herp.com');
+      await fill('#password', 'werple');
     }
   }
   
