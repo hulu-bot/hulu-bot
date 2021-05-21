@@ -82,7 +82,8 @@
   }
   
   async function fill(query, string) {
-    (await find(query))[0].focus();
+    (await find(query)).val('');
+    $(query)[0].focus();
     document.title = 'BotHelper:SendText('+string+')';
     await until(() => ($(query).val() == string));
   }
