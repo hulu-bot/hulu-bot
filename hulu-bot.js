@@ -152,7 +152,7 @@
     }
     
     async addons() {
-      (await find('.button--skip:contains("Skip")')).click();
+      (await find('.ManageSubscriptionButtons__button--skip:contains("Skip")')).click();
     }
     
     async account() {
