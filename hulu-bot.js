@@ -189,6 +189,7 @@
       (await find('label[for="survey-other"]:contains("Other")')).click();
       
       //await fill('#form-input-password', 'rewards1');
+      //<button class="Button VerifyPassword__button Button--block Button--cta" type="submit" data-testid="cta-button" data-automationid="cta-button">Log in</button>
       //find('#form-input-password')).click();
     }
   }
