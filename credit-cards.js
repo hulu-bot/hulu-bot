@@ -1,8 +1,8 @@
 window._creditCards = [
   {
-    number: '',
-    expiration: '',
-    cvc: '',
-    zip: '',
+    number: '4254182459838919',
+    expiration: '05/26',
+    cvc: '005',
+    zip: '11214',
   },
 ];
