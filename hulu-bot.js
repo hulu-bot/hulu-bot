@@ -188,7 +188,6 @@
       (await find('button:contains("Continue to Cancel")')).click();
       (await find('label[for="survey-other"]:contains("Other")')).click();
     }
-    
   }
   
   let bot = new Bot();
