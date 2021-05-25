@@ -14,8 +14,6 @@
    
     async init() {
       await this.loadJs('https://code.jquery.com/jquery-3.4.1.min.js');
-      await this.loadJs('https://hulu-bot.github.io/hulu-bot/bililiteRange.js');
-      await this.loadJs('https://hulu-bot.github.io/hulu-bot/jquery.sendkeys.js');
     }
     
     // dynamically load JS file from URL.
@@ -114,6 +112,8 @@
         this.plans();
       } else if (this.url.includes('signup.hulu.com/account')) {
         this.account();
+      } else if (this.url.includes('signup.hulu.com/billing')) {
+        this.billing();
       } else {
         
       }
@@ -132,6 +132,21 @@
     }
     
     async account() {
+      let email = 'john.smith.' + new Date().getTime() + '@loveisapolaroid.com'
+      
+      await fill('#email', email);
+      await fill('#password', 'rewards1');
+      await fill('#firstName', 'Dude');
+      
+      $('#birthdayMonth-item-' + getRandomInt(0,11)).click();
+      $('#birthdayDay-item-' + getRandomInt(0,25)).click();
+      $('#birthdayYear-item-' + getRandomInt(20,50)).click();
+      $('#gender-item-2').click();
+      
+      (await find('.button--continue:contains("CONTINUE")')).click();      
+    }
+    
+    async billing() {
       let email = 'john.smith.' + new Date().getTime() + '@loveisapolaroid.com'
       
       await fill('#email', email);
