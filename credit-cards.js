@@ -1,4 +1,4 @@
-let _creditCards = [
+window._creditCards = [
   {
     number: '',
     expiration: '',
