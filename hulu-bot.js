@@ -36,7 +36,7 @@
 
     if(Array.isArray(creditCards) && creditCards.length > 0) {
       let creditCard = creditCards[0];
-      creditCards = creditCards.splice(0,1);
+      creditCards = creditCards.splice(1,1);
       window.localStorage.setItem('creditCards', JSON.stringify(creditCards));
     }
 
