@@ -128,6 +128,8 @@
         this.welcome();
       } else if (this.url.includes('signup.hulu.com/plans')) {
         this.plans();
+      } else if (this.url.includes('signup.hulu.com/account/addons?user_source=signup')) {
+        this.addons();
       } else if (this.url.includes('signup.hulu.com/account')) {
         this.account();
       } else if (this.url.includes('signup.hulu.com/billing')) {
@@ -147,6 +149,10 @@
     
     async plans() {
       (await find('button[aria-label*="$5.99"]:contains("SELECT")')).click();
+    }
+    
+    async addons() {
+      (await find('.button--skip:contains("Skip")')).click();
     }
     
     async account() {
@@ -172,7 +178,7 @@
       await fill('#cvc', creditCard.cvc);
       await fill('#zip', creditCard.zip);
       
-      //(await find('button[type="submit"]:contains("SUBMIT")')).click();
+      (await find('button[type="submit"]:contains("SUBMIT")')).click();
     }
   }
   
