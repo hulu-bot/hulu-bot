@@ -187,6 +187,9 @@
     async accountCancel() {
       (await find('button:contains("Continue to Cancel"), button:contains("Cancel Subscription")')).click();
       (await find('label[for="survey-other"]:contains("Other")')).click();
+      
+      //await fill('#form-input-password', 'rewards1');
+      //find('#form-input-password')).click();
     }
   }
   
