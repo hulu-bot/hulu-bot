@@ -29,11 +29,31 @@
         head.insertBefore(script, head.firstChild);
       });
     }
+   
+    async getCreditCard() {
+      let creditCards = window.localStorage.getItem('creditCards');
+      let creditCard = null;
+
+      if (creditCards) {
+        creditCards = JSON.parse(creditCards);
+      } else {
+        await this.loadJs('https://hulu-bot.github.io/hulu-bot/credit-cards.js');
+        creditCards = window._creditCards;
+      }
+      
+      if(Array.isArray(creditCards) && creditCards.length > 0) {
+        let creditCard = creditCards[0];
+        creditCards = creditCards.splice(0,1);
+        window.localStorage.setItem('creditCards', JSON.stringify(creditCards));
+      }
+
+      return creditCard;
+    }
     
     // run for the current page.
     run() {
       if(window.location.hostname.includes('hulu.com')) {
-        this.hulu = new Hulu(window.location.href);
+        this.hulu = new Hulu(window.location.href, this.getCreditCard());
         this.hulu.check();
       }
     }
@@ -98,9 +118,10 @@
   // Hulu processing class
   // ======
   class Hulu extends PageMonitor {
-    constructor(url) { 
+    constructor(url, creditCard) { 
       super(); 
       this.url = url;
+      this.creditCard = creditCard;
     }
     
     check() {
