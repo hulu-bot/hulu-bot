@@ -3,6 +3,12 @@
     return new Promise(resolve => setTimeout(resolve, ms));
   }
   
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  
  class Bot {
     constructor() {}
    
@@ -126,13 +132,15 @@
     }
     
     async account() {
-      await fill('#email', 'derp@herp.com');
-      await fill('#password', 'werple');
+      let email = 'john.smith.' + new Date().getTime() + '@loveisapolaroid.com'
+      
+      await fill('#email', email);
+      await fill('#password', 'rewards1');
       await fill('#firstName', 'Dude');
       
-      $('#birthdayMonth-item-0').click();
-      $('#birthdayDay-item-0').click();
-      $('#birthdayYear-item-40').click();
+      $('#birthdayMonth-item-' + getRandomInt(0,11)).click();
+      $('#birthdayDay-item-' + getRandomInt(0,25)).click();
+      $('#birthdayYear-item-' + getRandomInt(20,50)).click();
       $('#gender-item-2').click();
       
       (await find('.button--continue:contains("CONTINUE")')).click();      
