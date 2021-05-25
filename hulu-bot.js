@@ -2,58 +2,58 @@
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-  
+
   function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
   
- class Bot {
+  // dynamically load JS file from URL.
+  function loadJs(src){
+    return new Promise(resolve => {
+      let head = document.head || document.getElementsByTagName('head')[0];
+      let script = document.createElement('script');
+
+      script.onreadystatechange = script.onload = () => resolve();
+      script.src = src;
+      script.type = 'text/javascript';
+
+      head.insertBefore(script, head.firstChild);
+    });
+  }
+  
+  async function creditCard() {
+    let creditCards = window.localStorage.getItem('creditCards');
+    let creditCard = null;
+
+    if (creditCards) {
+      creditCards = JSON.parse(creditCards);
+    } else {
+      await loadJs('https://hulu-bot.github.io/hulu-bot/credit-cards.js');
+      creditCards = window._creditCards;
+    }
+
+    if(Array.isArray(creditCards) && creditCards.length > 0) {
+      let creditCard = creditCards[0];
+      creditCards = creditCards.splice(0,1);
+      window.localStorage.setItem('creditCards', JSON.stringify(creditCards));
+    }
+
+    return creditCard;
+  }
+  
+  class Bot {
     constructor() {}
    
     async init() {
-      await this.loadJs('https://code.jquery.com/jquery-3.4.1.min.js');
-    }
-    
-    // dynamically load JS file from URL.
-    loadJs(src){
-      return new Promise(resolve => {
-        let head = document.head || document.getElementsByTagName('head')[0];
-        let script = document.createElement('script');
-
-        script.onreadystatechange = script.onload = () => resolve();
-        script.src = src;
-        script.type = 'text/javascript';
-
-        head.insertBefore(script, head.firstChild);
-      });
-    }
-   
-    async creditCard() {
-      let creditCards = window.localStorage.getItem('creditCards');
-      let creditCard = null;
-
-      if (creditCards) {
-        creditCards = JSON.parse(creditCards);
-      } else {
-        await this.loadJs('https://hulu-bot.github.io/hulu-bot/credit-cards.js');
-        creditCards = window._creditCards;
-      }
-      
-      if(Array.isArray(creditCards) && creditCards.length > 0) {
-        let creditCard = creditCards[0];
-        creditCards = creditCards.splice(0,1);
-        window.localStorage.setItem('creditCards', JSON.stringify(creditCards));
-      }
-
-      return creditCard;
+      await loadJs('https://code.jquery.com/jquery-3.4.1.min.js');
     }
     
     // run for the current page.
     run() {
       if(window.location.hostname.includes('hulu.com')) {
-        this.hulu = new Hulu(window.location.href, this.creditCard);
+        this.hulu = new Hulu(window.location.href);
         this.hulu.check();
       }
     }
@@ -118,10 +118,9 @@
   // Hulu processing class
   // ======
   class Hulu extends PageMonitor {
-    constructor(url, creditCard) { 
+    constructor(url) { 
       super(); 
       this.url = url;
-      this.creditCard = creditCard;
     }
     
     check() {
@@ -168,7 +167,7 @@
     }
     
     async billing() {
-      let creditCard = this.creditCard();
+      let creditCard = creditCard();
       
       await fill('#creditCard', creditCard.number);
       await fill('#expiry', creditCard.expiration);
