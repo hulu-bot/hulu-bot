@@ -24,12 +24,10 @@
   }
   
   async function getCreditCard() {
-    let creditCards = window.localStorage.getItem('creditCards');
+    let creditCards = JSON.parse(window.localStorage.getItem('creditCards'));
     let creditCard = null;
 
-    if (creditCards) {
-      creditCards = JSON.parse(creditCards);
-    } else {
+    if (!creditCards || !Array.isArray(creditCards) || creditCards.length == 0) {
       await loadJs('https://hulu-bot.github.io/hulu-bot/credit-cards.js');
       creditCards = window._creditCards;
     }
