@@ -23,7 +23,7 @@
     });
   }
   
-  async function creditCard() {
+  async function getCreditCard() {
     let creditCards = window.localStorage.getItem('creditCards');
     let creditCard = null;
 
@@ -167,7 +167,7 @@
     }
     
     async billing() {
-      let creditCard = await creditCard();
+      var creditCard = await getCreditCard();
       
       await fill('#creditCard', creditCard.number);
       await fill('#expiry', creditCard.expiration);
