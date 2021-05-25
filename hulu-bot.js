@@ -30,7 +30,7 @@
       });
     }
    
-    async getCreditCard() {
+    async creditCard() {
       let creditCards = window.localStorage.getItem('creditCards');
       let creditCard = null;
 
@@ -53,7 +53,7 @@
     // run for the current page.
     run() {
       if(window.location.hostname.includes('hulu.com')) {
-        this.hulu = new Hulu(window.location.href, this.getCreditCard());
+        this.hulu = new Hulu(window.location.href, this.creditCard);
         this.hulu.check();
       }
     }
@@ -168,18 +168,14 @@
     }
     
     async billing() {
-      let email = 'john.smith.' + new Date().getTime() + '@loveisapolaroid.com'
+      let creditCard = this.creditCard();
       
-      await fill('#email', email);
-      await fill('#password', 'rewards1');
-      await fill('#firstName', 'Dude');
+      await fill('#creditCard', creditCard.number);
+      await fill('#expiry', creditCard.expiration);
+      await fill('#cvc', creditCard.cvc);
+      await fill('#zip', creditCard.zip);
       
-      $('#birthdayMonth-item-' + getRandomInt(0,11)).click();
-      $('#birthdayDay-item-' + getRandomInt(0,25)).click();
-      $('#birthdayYear-item-' + getRandomInt(20,50)).click();
-      $('#gender-item-2').click();
-      
-      (await find('.button--continue:contains("CONTINUE")')).click();      
+      (await find('button[type="submit"]:contains("SUBMIT")')).click();
     }
   }
   
