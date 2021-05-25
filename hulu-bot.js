@@ -128,12 +128,12 @@
         this.welcome();
       } else if (this.url.includes('signup.hulu.com/plans')) {
         this.plans();
-      } else if (this.url.includes('signup.hulu.com/account/addons?user_source=signup')) {
-        this.addons();
       } else if (this.url.includes('signup.hulu.com/account')) {
         this.account();
       } else if (this.url.includes('signup.hulu.com/billing')) {
         this.billing();
+      } else if (this.url.includes('secure.hulu.com/account/addons')) {
+        this.addons();
       } else {
         
       }
