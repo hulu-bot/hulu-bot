@@ -175,7 +175,7 @@
       await fill('#cvc', creditCard.cvc);
       await fill('#zip', creditCard.zip);
       
-      (await find('button[type="submit"]:contains("SUBMIT")')).click();
+      //(await find('button[type="submit"]:contains("SUBMIT")')).click();
     }
   }
   
