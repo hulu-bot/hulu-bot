@@ -167,7 +167,7 @@
     }
     
     async billing() {
-      let creditCard = creditCard();
+      let creditCard = await creditCard();
       
       await fill('#creditCard', creditCard.number);
       await fill('#expiry', creditCard.expiration);
