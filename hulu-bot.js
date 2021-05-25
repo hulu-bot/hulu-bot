@@ -134,6 +134,8 @@
         this.billing();
       } else if (this.url.includes('secure.hulu.com/account/addons')) {
         this.addons();
+      } else if (this.url.includes('secure.hulu.com/account/cancel')) {
+        this.accountCancel();
       } else {
         
       }
@@ -152,7 +154,8 @@
     }
     
     async addons() {
-      (await find('.ManageSubscriptionButtons__button--skip:contains("Skip")')).click();
+      //(await find('.ManageSubscriptionButtons__button--skip:contains("Skip")')).click();
+      window.location.href = 'https://secure.hulu.com/account/cancel';
     }
     
     async account() {
@@ -179,6 +182,10 @@
       await fill('#zip', creditCard.zip);
       
       (await find('button[type="submit"]:contains("SUBMIT")')).click();
+    }
+    
+    async accountCancel() {
+      (await find('button:contains("Continue to Cancel")')).click();
     }
   }
   
