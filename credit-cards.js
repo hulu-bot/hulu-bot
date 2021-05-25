@@ -1,4 +1,4 @@
-let creditCards = [
+let _creditCards = [
   {
     number: '',
     expiration: '',
