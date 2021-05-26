@@ -204,8 +204,11 @@
     }
     
     async plans() {
-      flag('bot-signup');
-      (await find('button[aria-label*="$5.99"]:contains("SELECT")')).click();
+      if(flag('bot-signup')) {
+        deleteCookies(); 
+      } else {
+        (await find('button[aria-label*="$5.99"]:contains("SELECT")')).click();
+      }
     }
     
     async account() {
