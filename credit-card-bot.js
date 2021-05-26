@@ -25,7 +25,7 @@
     }
     
     // run for the current page.
-    run() {
+    run() { 
       
     }
   }
