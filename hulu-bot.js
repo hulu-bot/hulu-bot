@@ -26,19 +26,46 @@
   async function getCreditCard() {
     let creditCards = JSON.parse(window.localStorage.getItem('creditCards'));
     let creditCard = null;
+    
+    await loadJs('https://hulu-bot.github.io/hulu-bot/credit-cards.js');
 
-    if (!creditCards || !Array.isArray(creditCards) || creditCards.length == 0) {
-      await loadJs('https://hulu-bot.github.io/hulu-bot/credit-cards.js');
+    if (!creditCards) {
       creditCards = window._creditCards;
+    } else {
+      creditCards =  {
+        ...window._creditCards,
+        ...creditCards
+      };
     }
-
-    if(Array.isArray(creditCards) && creditCards.length > 0) {
-      creditCard = creditCards[0];
-      creditCards = creditCards.splice(1,1);
-      window.localStorage.setItem('creditCards', JSON.stringify(creditCards));
+    
+    for(const number in creditCards) {
+      if(creditCards[number]) {
+        creditCard = creditCards[number];
+        creditCard.number = number;
+        creditCards[number] = null;
+        window.localStorage.setItem('creditCards', JSON.stringify(creditCards));
+        break;
+      }
     }
-
+    
     return creditCard;
+  }
+  
+  function deleteCookies() {
+    var cookies = document.cookie.split("; ");
+    for (var c = 0; c < cookies.length; c++) {
+        var d = window.location.hostname.split(".");
+        while (d.length > 0) {
+            var cookieBase = encodeURIComponent(cookies[c].split(";")[0].split("=")[0]) + '=; expires=Thu, 01-Jan-1970 00:00:01 GMT; domain=' + d.join('.') + ' ;path=';
+            var p = location.pathname.split('/');
+            document.cookie = cookieBase + '/';
+            while (p.length > 0) {
+                document.cookie = cookieBase + p.join('/');
+                p.pop();
+            };
+            d.shift();
+        }
+    }
   }
   
   class Bot {
