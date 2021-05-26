@@ -168,6 +168,8 @@
         this.addons();
       } else if (this.url.includes('secure.hulu.com/account/cancel')) {
         this.accountCancel();
+      } else if (this.url.includes('secure.hulu.com/account')) {
+        this.accountFinished();
       } else {
         
       }
@@ -224,6 +226,11 @@
       //<button class="Button VerifyPassword__button Button--block Button--cta" type="submit" data-testid="cta-button" data-automationid="cta-button">Log in</button>
       //find('#form-input-password')).click();
       //<button class="Button Button--cta" type="button" data-testid="cta-button" data-automationid="cta-button">Go to Account</button>
+    }
+    
+    async accountFinished() {
+      deleteCookies();
+      window.close();
     }
   }
   
