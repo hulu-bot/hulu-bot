@@ -197,7 +197,8 @@
     
     async welcome() {
       if(flag('bot-welcome')) {
-        deleteCookies(); 
+        deleteCookies();
+        window.close();
       } else {
         (await find('.Masthead__input button:contains("FREE TRIAL")')).click();
       }
@@ -205,7 +206,8 @@
     
     async plans() {
       if(flag('bot-signup')) {
-        deleteCookies(); 
+        deleteCookies();
+        window.location.href = 'https://www.hulu.com';
       } else {
         (await find('button[aria-label*="$5.99"]:contains("SELECT")')).click();
       }
@@ -264,5 +266,7 @@
   bot.run();
   
 })();
+
+
 
 //"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-web-security --disable-gpu --disable-site-isolation-trials --user-data-dir="C:\ChromeUserData\BearUnsecure" --profile-directory="Profile 1"
