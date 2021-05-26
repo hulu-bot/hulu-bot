@@ -42,7 +42,13 @@
       if(creditCards[number]) {
         creditCard = creditCards[number];
         creditCard.number = number;
-        creditCards[number] = null;
+        
+        if(!creditCard.used) {
+          creditCard.used = true;
+        } else {
+          creditCards[number] = null;  
+        }
+        
         window.localStorage.setItem('creditCards', JSON.stringify(creditCards));
         break;
       }
@@ -71,6 +77,16 @@
     window.localStorage.clear();
     window.sessionStorage.clear();
     window.localStorage.setItem('creditCards', JSON.stringify(creditCards));
+  }
+  
+  function flag(key) {
+    let flag = JSON.parse(window.localStorage.getItem(key));
+    
+    if(flag == null) {
+      window.localStorage.setItem(key, 'true');
+    }
+    
+    return (flag != null);
   }
   
   class Bot {
@@ -180,19 +196,20 @@
     }
     
     async welcome() {
-      (await find('.Masthead__input button:contains("FREE TRIAL")')).click();
+      if(flag('bot-welcome')) {
+        deleteCookies(); 
+      } else {
+        (await find('.Masthead__input button:contains("FREE TRIAL")')).click();
+      }
     }
     
     async plans() {
+      flag('bot-signup');
       (await find('button[aria-label*="$5.99"]:contains("SELECT")')).click();
     }
     
-    async addons() {
-      //(await find('.ManageSubscriptionButtons__button--skip:contains("Skip")')).click();
-      window.location.href = 'https://secure.hulu.com/account/cancel';
-    }
-    
     async account() {
+      flag('bot-signup');
       let email = 'john.smith.' + new Date().getTime() + '@loveisapolaroid.com'
       
       await fill('#email', email);
@@ -208,6 +225,7 @@
     }
     
     async billing() {
+      flag('bot-signup');      
       var creditCard = await getCreditCard();
       
       await fill('#creditCard', creditCard.number);
@@ -216,6 +234,10 @@
       await fill('#zip', creditCard.zip);
       
       (await find('button[type="submit"]:contains("SUBMIT")')).click();
+    }
+    
+    async addons() {
+      window.location.href = 'https://secure.hulu.com/account/cancel';
     }
     
     async accountCancel() {
@@ -230,7 +252,7 @@
     
     async accountFinished() {
       deleteCookies();
-      window.close();
+      window.location.href = "https://signup.hulu.com"
     }
   }
   
