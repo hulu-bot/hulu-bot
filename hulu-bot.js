@@ -185,7 +185,9 @@
       } else if (this.url.includes('secure.hulu.com/account/cancel')) {
         this.accountCancel();
       } else if (this.url.includes('secure.hulu.com/account')) {
-        this.accountFinished();
+        this.accountClear();
+      } else if (this.url.includes('auth.hulu.com')) {
+        this.authClear();
       } else {
         
       }
@@ -255,7 +257,12 @@
       //<button class="Button Button--cta" type="button" data-testid="cta-button" data-automationid="cta-button">Go to Account</button>
     }
     
-    async accountFinished() {
+    async accountClear() {
+      deleteCookies();
+      window.location.href = "https://auth.hulu.com"
+    }
+    
+    async authClear() {
       deleteCookies();
       window.location.href = "https://signup.hulu.com"
     }
