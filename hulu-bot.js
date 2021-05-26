@@ -66,6 +66,11 @@
             d.shift();
         }
     }
+    
+    let creditCards = JSON.parse(window.localStorage.getItem('creditCards'));
+    window.localStorage.clear();
+    window.sessionStorage.clear();
+    window.localStorage.setItem('creditCards', JSON.stringify(creditCards));
   }
   
   class Bot {
