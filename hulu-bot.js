@@ -45,7 +45,7 @@
         
         if(!creditCard.used) {
           creditCard.used = true;
-        } else {
+        //} else {
           creditCards[number] = null;  
         }
         
