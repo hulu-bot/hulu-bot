@@ -160,9 +160,9 @@
     }
   }
   
-  // ======
-  // Hulu processing class
-  // ======
+  /*===========================================================================
+    Hulu processing class
+  ===========================================================================*/
   class Hulu extends PageMonitor {
     constructor(url) { 
       super(); 
@@ -266,6 +266,66 @@
       deleteCookies();
       window.location.href = "https://signup.hulu.com"
     }
+  }
+  
+  /*===========================================================================
+    Capital One 
+  ===========================================================================*/
+  class CapitalOne extends PageMonitor {
+    constructor(url) { 
+      super(); 
+      this.url = url;
+    }
+    
+    check() {
+      if (this.url.includes('myaccounts.capitalone.com/VirtualCards')) {
+        this.virtualCards();
+      } else {
+        
+      }
+    }
+    
+    async virtualCards() {
+      (await find('c1-ease-commerce-virtual-number-tile'));
+      
+      for(const tile of $('c1-ease-commerce-virtual-number-tile:has(div.token-name:contains("Hulu"))')) {
+        $(tile).click();
+        (await find('div.vcView:visible'));
+      }
+      
+      flag('bot-signup');
+      var creditCard = await getCreditCard();
+      
+      await fill('#creditCard', creditCard.number);
+      await fill('#expiry', creditCard.expiration);
+      await fill('#cvc', creditCard.cvc);
+      await fill('#zip', creditCard.zip);
+      
+      (await find('button[type="submit"]:contains("SUBMIT")')).click();
+    }
+    
+    /*
+    $('c1-ease-commerce-virtual-number-tile:has(div.token-name:contains("Hulu"))')[2].length
+      $('c1-ease-commerce-virtual-number-tile:has(div.token-name:contains("Hulu"))')[2].click()
+
+      $('div.vcNumber._TLPRIVATE:contains("••••")').length
+
+      $('div.vcView').click()
+
+      $($('div.vcNumber')[0]).text()
+      $($('div.vcExpiration')[0]).text()
+      $($('div.vcCVV')[0]).text()
+
+      $('.c1-ease-dialog-close-button').click()
+
+    $('c1-ease-commerce-virtual-number-tile:has(div.token-name:contains("Hulu"))')[2].length
+      $('c1-ease-commerce-virtual-number-tile:has(div.token-name:contains("Hulu"))')[2].click()
+      $('button.vc-delete-button').click()
+      $('button.deleteButton:contains("Delete")').click()
+      $('.c1-ease-dialog-close-button').click()
+
+    */
+    
   }
   
   let bot = new Bot();
