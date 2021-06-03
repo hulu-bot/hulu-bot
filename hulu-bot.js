@@ -291,6 +291,10 @@
       for(const tile of $('c1-ease-commerce-virtual-number-tile:has(div.token-name:contains("Hulu"))')) {
         $(tile).click();
         (await find('div.vcView:visible')).click();
+        
+        let vcNumber = $($('div.vcNumber')[0]).text().replace(/\s/g,'');
+        let vcExpiration = $($('div.vcExpiration')[0]).text().match(/[0-9]*\/[0-9]*/g);
+        let vcCVV = $($('div.vcCVV')[0]).text()
       }
       
       flag('bot-signup');
