@@ -290,7 +290,7 @@
       
       for(const tile of $('c1-ease-commerce-virtual-number-tile:has(div.token-name:contains("Hulu"))')) {
         $(tile).click();
-        (await find('div.vcView:visible'));
+        (await find('div.vcView:visible')).click();
       }
       
       flag('bot-signup');
