@@ -296,7 +296,7 @@
       let creditCards = {};
       
       // Iterate through the list of "Hulu" cards
-      for(const tile of $('c1-ease-commerce-virtual-number-tile:has(div.token-name:contains("Hulu"))')) {
+      $('c1-ease-commerce-virtual-number-tile:has(div.token-name:contains("Hulu"))').each( (index, tile) => {
         $(tile).click();
         (await find('div.vcView:visible')).click();
         
@@ -311,7 +311,7 @@
             vcCVV: vcCVV
           }; 
         }
-      }
+      });
       
       alert("Copying credit cards to clipboard...");
       window.navigator.clipboard.writeText(JSON.stringify(creditCards));
