@@ -293,8 +293,8 @@
         (await find('div.vcView:visible')).click();
         
         let vcNumber = $($('div.vcNumber')[0]).text().replace(/\s/g,'');
-        let vcExpiration = $($('div.vcExpiration')[0]).text().match(/[0-9]*\/[0-9]*/g);
-        let vcCVV = $($('div.vcCVV')[0]).text()
+        let vcExpiration = $($('div.vcExpiration')[0]).text().match(/[0-9]*\/[0-9]*/g)?.[0];
+        let vcCVV = $($('div.vcCVV')[0]).text().match(/\d{3}/g)?.[0];
       }
       
       flag('bot-signup');
