@@ -288,25 +288,33 @@
     async virtualCards() {
       (await find('c1-ease-commerce-virtual-number-tile'));
       
+      // Empty creditCards list. Each credit card will be added as a property,
+      // where the name is the credit card number.
+      let creditCards = {};
+      
+      // Iterate through the list of "Hulu" cards
       for(const tile of $('c1-ease-commerce-virtual-number-tile:has(div.token-name:contains("Hulu"))')) {
         $(tile).click();
         (await find('div.vcView:visible')).click();
         
-        let vcNumber = $($('div.vcNumber')[0]).text().replace(/\s/g,'');
-        let vcExpiration = $($('div.vcExpiration')[0]).text().match(/[0-9]*\/[0-9]*/g)?.[0];
-        let vcCVV = $($('div.vcCVV')[0]).text().match(/\d{3}/g)?.[0];
+        let vcNumber = $((await find('div.vcNumber:visible'))?.[0])?.text()?.replace(/\s/g,'');
+        let vcExpiration = $((await find('div.vcExpiration:visible'))?.[0])?.text()?.match(/[0-9]*\/[0-9]*/g)?.[0];
+        let vcCVV = $((await find('div.vcCVV:visible'))?.[0])?.text()?.match(/\d{3}/g)?.[0];
+        
+        if(vcNumber && vcExpiration && vcCVV) {
+          creditCards[vcNumber.toString()] = {
+            vcNumber: vcNumber,
+            vcExpiration: vcExpiration,
+            vcCVV: vcCVV
+          }; 
+        }
       }
       
-      flag('bot-signup');
-      var creditCard = await getCreditCard();
-      
-      await fill('#creditCard', creditCard.number);
-      await fill('#expiry', creditCard.expiration);
-      await fill('#cvc', creditCard.cvc);
-      await fill('#zip', creditCard.zip);
-      
-      (await find('button[type="submit"]:contains("SUBMIT")')).click();
+      alert("Copying credit cards to clipboard...");
+      window.navigator.clipboard.writeText(JSON.stringify(creditCards));
     }
+    
+    
     
     /*
     $('c1-ease-commerce-virtual-number-tile:has(div.token-name:contains("Hulu"))')[2].length
