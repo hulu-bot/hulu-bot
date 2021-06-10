@@ -298,11 +298,11 @@
       // Iterate through the list of "Hulu" cards
       $('c1-ease-commerce-virtual-number-tile:has(div.token-name:contains("Hulu"))').each( function(index, tile) {
         $(tile).click();
-        (await find('div.vcView:visible')).click();
+        ($('div.vcView:visible')).click();
         
-        let vcNumber = $((await find('div.vcNumber:visible'))?.[0])?.text()?.replace(/\s/g,'');
-        let vcExpiration = $((await find('div.vcExpiration:visible'))?.[0])?.text()?.match(/[0-9]*\/[0-9]*/g)?.[0];
-        let vcCVV = $((await find('div.vcCVV:visible'))?.[0])?.text()?.match(/\d{3}/g)?.[0];
+        let vcNumber = $(($('div.vcNumber:visible'))?.[0])?.text()?.replace(/\s/g,'');
+        let vcExpiration = $(($('div.vcExpiration:visible'))?.[0])?.text()?.match(/[0-9]*\/[0-9]*/g)?.[0];
+        let vcCVV = $(($('div.vcCVV:visible'))?.[0])?.text()?.match(/\d{3}/g)?.[0];
         
         if(vcNumber && vcExpiration && vcCVV) {
           creditCards[vcNumber.toString()] = {
